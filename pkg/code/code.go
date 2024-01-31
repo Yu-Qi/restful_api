@@ -8,6 +8,8 @@ import (
 const (
 	OK                   = 0
 	ParamIncorrect       = 1000
+	NotFound             = 1001
+	Timeout              = 1002
 	InternalUnknownError = 2999
 )
 

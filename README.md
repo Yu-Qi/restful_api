@@ -28,6 +28,7 @@ A task should contain at least the following fields:
 
 - 根據 xxx 專案的 clear architecture 架構，不過實作上很少會抽換 usecase，所以這邊實作並沒有多抽一層
 - clear architecture 幫助測試
+- 自己維護事務操作，需要考慮的情境 https://chat.openai.com/share/8ce9e2a0-787f-4b0d-a2e1-abc7a613051f
 
 ## TODO
 

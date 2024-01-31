@@ -13,11 +13,18 @@ type TaskStatus int
 
 // Task represents a task entity
 type Task struct {
-	Name   string
-	Status TaskStatus
+	Name   string     `json:"name"`
+	Status TaskStatus `json:"status"`
 }
 
 type TaskRepository interface {
 	GetTasks(context.Context) ([]*Task, *code.CustomError)
 	CreateTask(ctx context.Context, task *Task) *code.CustomError
+	UpdateTask(ctx context.Context, params *UpdateTaskParams) *code.CustomError
+	DeleteTask(ctx context.Context, id int) *code.CustomError
+}
+type UpdateTaskParams struct {
+	ID     int
+	Name   *string
+	Status *TaskStatus
 }
