@@ -21,6 +21,7 @@ type inMemoryTaskRepo struct {
 	CreateLock sync.Mutex
 	// WriteRowLock key: task id, value: sync.Mutex
 	WriteRowLock *lock.LockMap
+	TaskID       int
 }
 
 // NewInMemoryTaskRepo will create an object that represent the task.Repository interface
@@ -29,6 +30,7 @@ func NewInMemoryTaskRepo() domain.TaskRepository {
 		StorageMap:   sync.Map{},
 		CreateLock:   sync.Mutex{},
 		WriteRowLock: lock.NewLockMap(lockWaitSecond),
+		TaskID:       0,
 	}
 }
 
@@ -58,9 +60,9 @@ func (i *inMemoryTaskRepo) CreateTask(ctx context.Context, task *domain.Task) *c
 	i.CreateLock.Lock()
 	defer i.CreateLock.Unlock()
 
-	id := getLen(&i.StorageMap) + 1
-	i.StorageMap.Store(id, &model.Task{
-		Id:     id,
+	i.TaskID++
+	i.StorageMap.Store(i.TaskID, &model.Task{
+		Id:     i.TaskID,
 		Name:   task.Name,
 		Status: task.Status,
 	})
