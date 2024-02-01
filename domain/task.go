@@ -13,6 +13,7 @@ type TaskStatus int
 
 // Task represents a task entity
 type Task struct {
+	ID     int        `json:"-"`
 	Name   string     `json:"name"`
 	Status TaskStatus `json:"status"`
 }

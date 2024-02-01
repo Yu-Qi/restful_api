@@ -27,12 +27,11 @@ func main() {
 }
 
 func registerV1API(r *gin.Engine, ctx context.Context) {
-	v1 := r.Group("/v1")
 
 	// task
 	taskRepo := _taskRepo.NewInMemoryTaskRepo()
 	_taskUsecase.Init(_taskUsecase.InitParam{
 		TaskRepo: taskRepo,
 	})
-	_taskHttpDelivery.NewTaskHandler(v1)
+	_taskHttpDelivery.NewTaskHandler(r.Group(""))
 }

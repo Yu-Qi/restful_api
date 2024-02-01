@@ -43,6 +43,7 @@ func (i *inMemoryTaskRepo) GetTasks(ctx context.Context) ([]*domain.Task, *code.
 			return true
 		}
 		tasks = append(tasks, &domain.Task{
+			ID:     modelTask.Id,
 			Name:   modelTask.Name,
 			Status: modelTask.Status,
 		})

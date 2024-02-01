@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -17,11 +18,13 @@ type TaskHandler struct{}
 
 // NewTaskHandler will initialize the tasks/ resources endpoint
 func NewTaskHandler(r *gin.RouterGroup) {
+	v1 := r.Group("/v1")
+
 	handler := &TaskHandler{}
-	r.GET("/tasks", handler.GetTasks)
-	r.POST("/tasks", handler.CreateTask)
-	r.PUT("/tasks/{id}", handler.UpdateTask)
-	r.DELETE("/tasks/{id}", handler.DeleteTask)
+	v1.GET("/tasks", handler.GetTasks)
+	v1.POST("/tasks", handler.CreateTask)
+	v1.PUT("/tasks/:id", handler.UpdateTask)
+	v1.DELETE("/tasks/:id", handler.DeleteTask)
 }
 
 // TaskHandler get all tasks
@@ -45,6 +48,12 @@ func (t *TaskHandler) CreateTask(ctx *gin.Context) {
 	task := createTaskParams{}
 	customErr := util.ToGinContextExt(ctx).BindJson(&task)
 	if customErr != nil {
+		response.CustomError(ctx, customErr)
+		return
+	}
+
+	if !task.Status.IsValid() {
+		customErr = code.NewCustomError(code.ParamIncorrect, http.StatusBadRequest, fmt.Errorf("status is invalid"))
 		response.CustomError(ctx, customErr)
 		return
 	}
@@ -76,6 +85,12 @@ func (t *TaskHandler) UpdateTask(ctx *gin.Context) {
 	taskID, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		customErr = code.NewCustomError(code.ParamIncorrect, http.StatusBadRequest, err)
+		response.CustomError(ctx, customErr)
+		return
+	}
+
+	if !task.Status.IsValid() {
+		customErr = code.NewCustomError(code.ParamIncorrect, http.StatusBadRequest, fmt.Errorf("status is invalid"))
 		response.CustomError(ctx, customErr)
 		return
 	}
