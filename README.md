@@ -35,16 +35,6 @@ A task should contain at least the following fields:
 
 ## Principle
 
-- 根據 xxx 專案的 clear architecture 架構，不過實作上很少會抽換 usecase，所以這邊實作並沒有多抽一層
-- clear architecture 幫助測試
+- 根據 https://github.com/bxcodec/go-clean-arch 專案的 clear architecture 架構，不過實作上很少會抽換 usecase，所以這邊實作並沒有多抽一層
+- 透過 clear architecture 來實作，可以讓程式碼更好維護，並且可以更好的測試
 - 自己維護事務操作，需要考慮的情境 https://chat.openai.com/share/8ce9e2a0-787f-4b0d-a2e1-abc7a613051f
-
-## TODO
-
-- db
-- 權限
-- 分頁
-
-## 待確認
-
-- 全域的 repo 是好的嗎
