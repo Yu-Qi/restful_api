@@ -214,7 +214,7 @@ func (s *updateTaskSuite) SetupTest() {
 	}
 }
 
-func (s *updateTaskSuite) TestSuccess() {
+func (s *updateTaskSuite) TestSuccessWithCompleted() {
 	body := map[string]interface{}{
 		"name":   "test",
 		"status": 1,
@@ -240,6 +240,36 @@ func (s *updateTaskSuite) TestSuccess() {
 		if task.ID == 1 {
 			s.Equal("test", task.Name)
 			s.Equal(1, int(task.Status))
+		}
+	}
+}
+
+func (s *updateTaskSuite) TestSuccessWithIncompleted() {
+	body := map[string]interface{}{
+		"name":   "test",
+		"status": 0,
+	}
+
+	w := httptest.NewRecorder()
+	jsonStr, err := json.Marshal(body)
+	s.NoError(err)
+	req, err := http.NewRequest("PUT", fmt.Sprintf(s.UrlFormat, 1), bytes.NewBuffer(jsonStr))
+	s.NoError(err)
+	s.Router.ServeHTTP(w, req)
+	s.Equal(http.StatusOK, w.Code)
+
+	var response struct {
+		Code int `json:"code"`
+	}
+	err = json.Unmarshal(w.Body.Bytes(), &response)
+	s.Nil(err)
+	s.Equal(0, response.Code)
+	actualTask, customErr := _taskUsecase.GetTasks(s.Ctx)
+	s.Nil(customErr)
+	for _, task := range actualTask {
+		if task.ID == 1 {
+			s.Equal("test", task.Name)
+			s.Equal(0, int(task.Status))
 		}
 	}
 }

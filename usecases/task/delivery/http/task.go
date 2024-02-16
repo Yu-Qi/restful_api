@@ -39,8 +39,8 @@ func (t *TaskHandler) GetTasks(ctx *gin.Context) {
 }
 
 type createTaskParams struct {
-	Name   string            `json:"name" binding:"required"`
-	Status domain.TaskStatus `json:"status" binding:"required"`
+	Name   string             `json:"name" binding:"required"`
+	Status *domain.TaskStatus `json:"status" binding:"required"`
 }
 
 // CreateTask create a task
@@ -60,7 +60,7 @@ func (t *TaskHandler) CreateTask(ctx *gin.Context) {
 
 	customErr = usecase.CreateTask(ctx, &domain.Task{
 		Name:   task.Name,
-		Status: task.Status,
+		Status: *task.Status,
 	})
 	if customErr != nil {
 		response.CustomError(ctx, customErr)
